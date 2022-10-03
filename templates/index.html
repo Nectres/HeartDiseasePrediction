@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="input-form">
+        <h1 style="text-align:center">Heart Disease Prediction</h1>
+        <label>Does exercising cause Angina in the patient?
+            <select id="exang">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+        </label>
+        <label>Amount of ST depression during exercise relative to rest: <input type="number" id="oldpeak"
+                value="0" step="0.5"></label>
+        <label>Number of major vessels colored by floroscopy: <input type="number" min="0" max="3" id="ca"
+                value="0"></label>
+        <label>Thalassemia (Irregular blood flow in heart):
+            <select id="thal">
+                <option value="0">Normal Blood Flow</option>
+                <option value="1">Fixed Defect (No blood flow in some parts of heart)</option>
+                <option value="2">Reversable Defect (Blood flow is not normal)</option>
+            </select>
+        </label>
+            <button onclick="getResult()">Predict</button>
+        <span id="result"></span>
+    </div>
+</body>
+<style>
+    body, input, select, button {
+        font-family: 'Inter';
+    }
+
+    body {
+        background: url('https://img.freepik.com/premium-vector/healthcare-medical-background-with-ecg-heart-pulse_97886-551.jpg?w=2000');
+        background-repeat: no-repeat;
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 95vh;
+        width: 95vw;
+    }
+
+    .input-form {
+        background: white;
+        padding: 40px 25px;
+        display: flex;
+        justify-content: center;
+        flex-flow: column;
+        gap: 25px;
+        border-radius: 8px;
+    }
+
+    input,
+    select {
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 0;
+        border: 1px solid black;
+        outline: none;
+    }
+
+    input:focus, select:focus {
+        border: 1px solid blue;
+    }
+
+    button {
+        background: darkblue;
+        color: white;
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 0;
+        outline: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: black;
+    }
+
+    #result {
+        background: lightblue;
+        color: darkblue;
+        font-weight: 600;
+        padding: 10px 15px;
+        border-radius: 6px;
+    }
+</style>
+<script>
+    function getVal(id) {
+        return document.getElementById(id).value;
+    }
+
+    async function getResult() {
+        const p1 = getVal("exang")
+        const p2 = getVal("oldpeak")
+        const p3 = getVal("ca")
+        const p4 = getVal("thal")
+        console.log(location)
+        const url = `${location.origin}/api/?p1=${p1}&p2=${p2}&p3=${p3}&p4=${p4}`
+        console.log({ url })
+        const resp = await fetch(url)
+        console.log(resp)
+        const prediction = await resp.text();
+        let output;
+        if (prediction == "True")
+            output = "The patient has high change of having a heart disease"
+        else
+            output = "The patient does not have a heart disease";
+        document.getElementById("result").innerText = output;
+    }
+</script>
+
+</html>
